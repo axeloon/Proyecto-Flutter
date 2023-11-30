@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:proyecto_flutter/views/home_view.dart';
 import '../pages/login_page.dart';
-import '../pages/rooms_page.dart';
 
 class HomePage extends StatelessWidget {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -33,11 +32,22 @@ class HomePage extends StatelessWidget {
         children: [
           HomeView(), // Aquí integras el widget generado
           Positioned(
-            top: 0,
-            left: 0,
-            child: IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () => _handleSignOut(context),
+            bottom: 16,
+            left: 16,
+            child: InkWell(
+              onTap: () => _handleSignOut(context),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey.withOpacity(0.3),
+                ),
+                child: const Icon(
+                  Icons.logout,
+                  size: 32,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
         ],

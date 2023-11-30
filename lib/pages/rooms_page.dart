@@ -29,13 +29,13 @@ class _RoomsPageState extends State<RoomsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Salas Disponibles'),
+        title: const Text('Salas Disponibles'),
       ),
       body: FutureBuilder<List<Room>>(
         future: _fetchRoomsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
@@ -45,7 +45,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 itemCount: rooms.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    margin: EdgeInsets.all(8.0),
+                    margin: const EdgeInsets.all(8.0),
                     child: ListTile(
                       title: Text('Código: ${rooms[index].code}'),
                       subtitle: Column(
@@ -65,7 +65,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 },
               );
             } else {
-              return Center(child: Text('No hay salas disponibles.'));
+              return const Center(child: Text('No hay salas disponibles.'));
             }
           }
         },
