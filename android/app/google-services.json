@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1004401199858",
+    "project_id": "proyecto-flutter-ca1b0",
+    "storage_bucket": "proyecto-flutter-ca1b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004401199858:android:bf57aad3d7b02e7a9e5e6b",
+        "android_client_info": {
+          "package_name": "zeta.utem.proyecto_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004401199858-4gfrbg7cggj3iotd43kb9a13vkse6ilk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "zeta.utem.proyecto_flutter",
+            "certificate_hash": "53bfd721cb1d1f5532f50e8ef2ddac09afca7802"
+          }
+        },
+        {
+          "client_id": "1004401199858-h6lvugb61cj84na1v1ierlrfg19bq20i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "zeta.utem.proyecto_flutter",
+            "certificate_hash": "24016fd232934f8d94d8fd2666f2232977b96736"
+          }
+        },
+        {
+          "client_id": "1004401199858-ja88eeqomc8jibl63er9ob6i9ebbbdae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeZhWFc8vDQn9_Heg1DmKZ-LT36uLhEJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004401199858-ja88eeqomc8jibl63er9ob6i9ebbbdae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
