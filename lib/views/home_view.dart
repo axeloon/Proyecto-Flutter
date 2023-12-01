@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../pages/rooms_page.dart';
 import '../pages/reserve_rooms_page.dart';
 
-enum Option { explore, reserve, history, cancel }
+enum Option { explore, reserve, history, cancel } //Enum para las opciones
 
 class HomeView extends StatelessWidget {
   @override
@@ -56,7 +56,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget buildOptionCard(Option option, BuildContext context) {
+  Widget buildOptionCard(Option option, BuildContext context) { //Selección en el widget 
     String title;
     switch (option) {
       case Option.explore:
