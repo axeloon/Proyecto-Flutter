@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../pages/rooms_page.dart';
 import '../pages/reserve_rooms_page.dart';
-
+import '../pages/history_page.dart';
 enum Option { explore, reserve, history, cancel } // Enum para las opciones
 
 class HomeView extends StatelessWidget {
@@ -113,12 +113,19 @@ class HomeView extends StatelessWidget {
         );
         break;
       case Option.reserve:
-      case Option.history:
-      case Option.cancel:
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ReserveRoomsPage()),
         );
+        break;
+      case Option.history:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HistoryPage()),
+        );
+        break;
+      case Option.cancel:
+
         break;
     }
   }
