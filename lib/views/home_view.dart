@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import '../pages/rooms_page.dart';
-import '../pages/reserve_rooms_page.dart'; // Importa la página de reserva de salas
+import '../pages/reserve_rooms_page.dart';
+
+enum Option { explore, reserve, history, cancel }
 
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: Text('Home'),
-      ), */
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            // Agregado para el título "INICIO"
             decoration: const BoxDecoration(
-              color:
-                  Color.fromRGBO(44, 173, 173, 1), // Color de fondo del título
+              color: Color.fromRGBO(44, 173, 173, 1),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -41,57 +38,87 @@ class HomeView extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
-          buildOptionCard('Exploración de salas', context),
+          buildOptionCard(Option.explore, context),
           const SizedBox(
             height: 20,
           ),
-          buildOptionCard('Reserva de salas', context),
+          buildOptionCard(Option.reserve, context),
           const SizedBox(
             height: 20,
           ),
-          buildOptionCard('Historial de reservas', context),
+          buildOptionCard(Option.history, context),
           const SizedBox(
             height: 20,
           ),
-          buildOptionCard('Anular reserva', context),
+          buildOptionCard(Option.cancel, context),
         ],
       ),
     );
   }
 
-  Widget buildOptionCard(String title, BuildContext context) {
+  Widget buildOptionCard(Option option, BuildContext context) {
+    String title;
+    switch (option) {
+      case Option.explore:
+        title = 'Exploración de salas';
+        break;
+      case Option.reserve:
+        title = 'Reserva de salas';
+        break;
+      case Option.history:
+        title = 'Historial de reservas';
+        break;
+      case Option.cancel:
+        title = 'Anular reserva';
+        break;
+    }
+
     return Card(
       elevation: 4,
       child: ListTile(
-          title: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color.fromRGBO(0, 0, 0, 1),
-              fontFamily: 'Inter',
-              fontSize: 24,
-              letterSpacing: 0,
-              fontWeight: FontWeight.normal,
-              height: 1,
-            ),
+        title: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Color.fromRGBO(0, 0, 0, 1),
+            fontFamily: 'Inter',
+            fontSize: 24,
+            letterSpacing: 0,
+            fontWeight: FontWeight.normal,
+            height: 1,
           ),
-          onTap: () {
-            if (title == 'Exploración de salas') {
-              // Redirigir a rooms_page.dart
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RoomsPage()),
-              );
-            } else if (title == 'Reserva de salas') {
-              // Redirigir a la página de reserva de salas
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ReserveRoomsPage()),
-              );
-            } else {
-              // Manejar otras opciones si es necesario
-            }
-          }),
+        ),
+        onTap: () => navigateToOption(option, context),
+      ),
     );
+  }
+
+  void navigateToOption(Option option, BuildContext context) {
+    switch (option) {
+      case Option.explore:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RoomsPage()),
+        );
+        break;
+      case Option.reserve:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ReserveRoomsPage()),
+        );
+        break;
+      case Option.history:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ReserveRoomsPage()),
+        );
+        break;
+      case Option.cancel:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ReserveRoomsPage()),
+        );
+        break;
+    }
   }
 }
