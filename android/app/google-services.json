@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1004401199858-645g53b2jh5mdqkq1v2gqdh85m895k6v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "zeta.utem.proyecto_flutter",
+            "certificate_hash": "159bd1b050f895dea1105a89a5ef7d463d7a1078"
+          }
+        },
+        {
           "client_id": "1004401199858-h6lvugb61cj84na1v1ierlrfg19bq20i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

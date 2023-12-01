@@ -39,12 +39,12 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('UTEM Login'),
+        title: const Text('UTEM Login'),
       ),
       body: Center(
         child: ElevatedButton(
           onPressed: () => _handleSignIn(context),
-          child: Text('Iniciar Sesión con Google'),
+          child: const Text('Iniciar Sesión con Google'),
         ),
       ),
     );

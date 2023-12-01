@@ -31,44 +31,47 @@ class _RoomsPageState extends State<RoomsPage> {
       appBar: AppBar(
         title: const Text('Salas Disponibles'),
       ),
-      body: FutureBuilder<List<Room>>(
-        future: _fetchRoomsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            List<Room>? rooms = snapshot.data;
-            if (rooms != null && rooms.isNotEmpty) {
-              return ListView.builder(
-                itemCount: rooms.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: const EdgeInsets.all(8.0),
-                    child: ListTile(
-                      title: Text('Código: ${rooms[index].code}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Ubicación: ${rooms[index].location}'),
-                          Text('Nombre: ${rooms[index].name}'),
-                          Text(
-                              'Capacidad: ${rooms[index].capacity.toString()}'),
-                        ],
-                      ),
-                      onTap: () {
-                        // Acciones al tocar una sala
-                      },
-                    ),
-                  );
-                },
-              );
+      body: Container(
+        color: Color.fromRGBO(186, 240, 240, 1), // Color de fondo deseado
+        child: FutureBuilder<List<Room>>(
+          future: _fetchRoomsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              return const Center(child: Text('No hay salas disponibles.'));
+              List<Room>? rooms = snapshot.data;
+              if (rooms != null && rooms.isNotEmpty) {
+                return ListView.builder(
+                  itemCount: rooms.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      margin: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text('Nombre: ${rooms[index].name}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Ubicación: ${rooms[index].location}'),
+                            Text('Código: ${rooms[index].code}'),
+                            Text(
+                                'Capacidad: ${rooms[index].capacity.toString()}'),
+                          ],
+                        ),
+                        onTap: () {
+                          // Acciones al tocar una sala
+                        },
+                      ),
+                    );
+                  },
+                );
+              } else {
+                return const Center(child: Text('No hay salas disponibles.'));
+              }
             }
-          }
-        },
+          },
+        ),
       ),
     );
   }

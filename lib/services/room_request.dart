@@ -7,7 +7,7 @@ class RoomRequest {
   static final Uri reserveUrl =
       Uri.https('api.sebastian.cl', 'booking/v1/reserve/request');
 
-  static Future<void> reserveRoom(Request request) async {
+  static Future<List<dynamic>> reserveRoom(Request request) async {
     final String? token = TokenStorage.idToken;
 
     if (token == null) {
@@ -24,8 +24,11 @@ class RoomRequest {
         body: jsonEncode(request.toJson()),
       );
 
-      if (response.statusCode == 200) {
-        print('Sala reservada exitosamente');
+      if (response.statusCode == 201) {
+        // Parsear la respuesta JSON como una lista
+        final List<dynamic> responseData = jsonDecode(response.body);
+        // Retornar la lista de datos
+        return responseData;
       } else {
         throw Exception(
             'Error al reservar la sala. Código de estado: ${response.statusCode}. Mensaje: ${response.body}');
