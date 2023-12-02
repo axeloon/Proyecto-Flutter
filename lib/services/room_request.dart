@@ -4,8 +4,7 @@ import '../models/request.dart';
 import 'token_storage.dart';
 
 class RoomRequest {
-  static final Uri reserveUrl =
-      Uri.https('api.sebastian.cl', 'booking/v1/reserve/request');
+  static final Uri reserveUrl = Uri.https('api.sebastian.cl', 'booking/v1/reserve/request');
 
   static Future<List<dynamic>> reserveRoom(Request request) async {
     final String? token = TokenStorage.idToken;

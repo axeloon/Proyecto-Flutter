@@ -32,23 +32,18 @@ class _HistoryPageState extends State<HistoryPage> {
         children: [
           TextField(
             controller: _roomCodeController,
-            decoration: InputDecoration(labelText: 'Room Code'),
+            decoration: InputDecoration(labelText: 'Codigo Sala'),
           ),
           const SizedBox(height: 16.0),
           TextField(
             controller: _dateController,
-            decoration: InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+            decoration: InputDecoration(labelText: 'Fecha(AAAA-MM-DD)'),
           ),
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              // Al hacer clic en el botón, realiza la solicitud de historial
-              setState(() {
-                _fetchHistoryFuture = HistoryService.fetchHistory(
-                  _roomCodeController.text,
-                  _dateController.text,
-                );
-              });
+              // Al hacer clic en el botón, realiza la solicitud de busqueda de la reserva
+              _fetchHistory();
             },
             child: const Text('Buscar Historial'),
           ),
@@ -96,6 +91,14 @@ class _HistoryPageState extends State<HistoryPage> {
                           onTap: () {
                             // Acciones al tocar un elemento del historial
                           },
+                          // Añade un botón de "Eliminar" en cada elemento de la lista
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              // Lógica para eliminar la reserva
+                              _showDeleteConfirmationDialog(history.token);
+                            },
+                          ),
                         ),
                       );
                     },
@@ -109,7 +112,78 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
     ),
   );
+
+  // Método para mostrar un diálogo de confirmación antes de eliminar la reserva
+  void _showDeleteConfirmationDialog(String token) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Eliminar Reserva'),
+          content: Text('¿Estás seguro de que deseas eliminar esta reserva?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Lógica para eliminar la reserva (llamar al servicio correspondiente)
+                _deleteReservation(token);
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Método para eliminar la reserva usando el servicio correspondiente
+  void _deleteReservation(String token) {
+    // Llamar al servicio para eliminar la reserva con el token proporcionado
+    HistoryService.deleteReservation(token).then((statusCode) {
+      // Verificar el código de estado devuelto por el servicio
+      if (statusCode == 204) {
+        // Éxito al eliminar la reserva
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Reserva eliminada exitosamente.'),
+          duration: Duration(seconds: 2),
+        ));
+
+        // Recargar el historial después de la eliminación
+        _fetchHistory();
+      } else {
+        // Manejar otros códigos de estado si es necesario
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error al eliminar la reserva. Código de estado: $statusCode.'),
+          duration: Duration(seconds: 2),
+        ));
+      }
+    }).catchError((error) {
+      // Manejar errores si es necesario
+      print('Error al eliminar la reserva: $error');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error al eliminar la reserva. Por favor, inténtelo nuevamente.'),
+        duration: Duration(seconds: 2),
+      ));
+    });
+  }
+
+  // Método para realizar una nueva solicitud de historial
+  void _fetchHistory() {
+    setState(() {
+      _fetchHistoryFuture = HistoryService.fetchHistory(
+        _roomCodeController.text,
+        _dateController.text,
+      );
+    });
+  }
 }
+
 
 
 
