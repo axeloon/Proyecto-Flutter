@@ -21,97 +21,100 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text('Historial de Reservas'),
-    ),
-    body: Container(
-      color: const Color.fromRGBO(186, 240, 240, 1),
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextField(
-            controller: _roomCodeController,
-            decoration: InputDecoration(labelText: 'Codigo Sala'),
-          ),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: _dateController,
-            decoration: InputDecoration(labelText: 'Fecha(AAAA-MM-DD)'),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: () {
-              // Realiza la solicitud de busqueda de la reserva
-              _fetchHistory();
-            },
-            child: const Text('Buscar Historial'),
-          ),
-          const SizedBox(height: 16.0),
-          Expanded(
-            child: FutureBuilder<List<History>>(
-              future: _fetchHistoryFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      'Error al cargar el historial. Por favor, inténtelo nuevamente.',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  );
-                } else {
-                  List<History> historyList = snapshot.data ?? [];
-
-                  return historyList.isNotEmpty
-                      ? ListView.builder(
-                    itemCount: historyList.length,
-                    itemBuilder: (context, index) {
-                      final history = historyList[index];
-                      return Card(
-                        margin: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          title: Text(
-                            'Token: ${history.token}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Usuario: ${history.userEmail}'),
-                              Text('Sala: ${history.roomCode}'),
-                              Text('Inicio: ${history.start}'),
-                              Text('Fin: ${history.end}'),
-                            ],
-                          ),
-                          onTap: () {
-                            // Acciones al tocar un elemento del historial
-                          },
-                          // Añade un botón de "Eliminar" en cada elemento de la lista
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              // Lógica para eliminar la reserva
-                              _showDeleteConfirmationDialog(history.token);
-                            },
-                          ),
+        appBar: AppBar(
+          title: const Text('Historial de Reservas'),
+        ),
+        body: Container(
+          color: const Color.fromRGBO(186, 240, 240, 1),
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: _roomCodeController,
+                decoration: InputDecoration(labelText: 'Codigo Sala'),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _dateController,
+                decoration: InputDecoration(labelText: 'Fecha(AAAA-MM-DD)'),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Realiza la solicitud de busqueda de la reserva
+                  _fetchHistory();
+                },
+                child: const Text('Buscar Historial'),
+              ),
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: FutureBuilder<List<History>>(
+                  future: _fetchHistoryFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          'Error al cargar el historial. Por favor, inténtelo nuevamente.',
+                          style: TextStyle(color: Colors.red),
                         ),
                       );
-                    },
-                  )
-                      : const Center(child: Text('No hay historial disponible.'));
-                }
-              },
-            ),
+                    } else {
+                      List<History> historyList = snapshot.data ?? [];
+
+                      return historyList.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: historyList.length,
+                              itemBuilder: (context, index) {
+                                final history = historyList[index];
+                                return Card(
+                                  margin: const EdgeInsets.all(8.0),
+                                  child: ListTile(
+                                    title: Text(
+                                      'Token: ${history.token}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Usuario: ${history.userEmail}'),
+                                        Text('Sala: ${history.roomCode}'),
+                                        Text('Inicio: ${history.start}'),
+                                        Text('Fin: ${history.end}'),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      // Acciones al tocar un elemento del historial
+                                    },
+                                    // Añade un botón de "Eliminar" en cada elemento de la lista
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: () {
+                                        // Lógica para eliminar la reserva
+                                        _showDeleteConfirmationDialog(
+                                            history.token);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text('No hay historial disponible.'));
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   // Método para mostrar un diálogo de confirmación antes de eliminar la reserva
   void _showDeleteConfirmationDialog(String token) {
@@ -159,7 +162,8 @@ class _HistoryPageState extends State<HistoryPage> {
       } else {
         // Manejar otros códigos de estado si es necesario
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Error al eliminar la reserva. Código de estado: $statusCode.'),
+          content: Text(
+              'Error al eliminar la reserva. Código de estado: $statusCode.'),
           duration: Duration(seconds: 2),
         ));
       }
@@ -167,7 +171,8 @@ class _HistoryPageState extends State<HistoryPage> {
       // Manejar errores si es necesario
       print('Error al eliminar la reserva: $error');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error al eliminar la reserva. Por favor, inténtelo nuevamente.'),
+        content: Text(
+            'Error al eliminar la reserva. Por favor, inténtelo nuevamente.'),
         duration: Duration(seconds: 2),
       ));
     });
@@ -183,9 +188,3 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 }
-
-
-
-
-
-

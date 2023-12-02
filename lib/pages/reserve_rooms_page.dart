@@ -1,3 +1,4 @@
+// Importación de paquetes y archivos necesarios
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../services/room_service.dart';
@@ -5,27 +6,32 @@ import '../models/room.dart';
 import '../models/request.dart';
 import '../services/room_request.dart';
 
+// Clase StatefulWidget para la página de reserva de salas
 class ReserveRoomsPage extends StatefulWidget {
   @override
   _ReserveRoomsPageState createState() => _ReserveRoomsPageState();
 }
 
+// Estado asociado a la página de reserva de salas
 class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
-  late Future<List<Room>> _fetchRoomsFuture;
-  Room? _selectedRoom;
-  late List<Room> _rooms = []; // Variable para almacenar las salas
+  late Future<List<Room>>
+      _fetchRoomsFuture; // Futuro para obtener la lista de salas
+  Room? _selectedRoom; // Sala seleccionada actualmente
+  late List<Room> _rooms = []; // Variable para almacenar las salas disponibles
 
   @override
   void initState() {
     super.initState();
-    _fetchRoomsFuture = _fetchRooms();
+    _fetchRoomsFuture = _fetchRooms(); // Obtener las salas al iniciar la página
   }
 
+  // Método para obtener la lista de salas desde el servicio
   Future<List<Room>> _fetchRooms() async {
     try {
-      final List<Room> rooms = await RoomService.fetchRooms();
+      final List<Room> rooms =
+          await RoomService.fetchRooms(); // Obtener las salas del servicio
       setState(() {
-        _rooms = rooms; // Actualiza la lista de salas con los datos obtenidos
+        _rooms = rooms; // Actualizar la lista de salas con los datos obtenidos
       });
       return rooms;
     } catch (error) {
@@ -37,20 +43,25 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reserva de Salas'),
+        title:
+            const Text('Reserva de Salas'), // Título de la barra de aplicación
       ),
       body: Container(
         width: double.infinity,
         height: 800,
-        color: Color.fromRGBO(186, 240, 240, 1),
+        color: Color.fromRGBO(186, 240, 240, 1), // Color de fondo
         padding: EdgeInsets.all(20),
         child: FutureBuilder<List<Room>>(
           future: _fetchRoomsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                  child:
+                      CircularProgressIndicator()); // Mostrar indicador de carga mientras se obtienen las salas
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(
+                  child: Text(
+                      'Error: ${snapshot.error}')); // Mostrar mensaje de error si ocurre un problema
             } else {
               if (_rooms.isNotEmpty) {
                 return ListView.builder(
@@ -60,28 +71,34 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Tarjeta para cada sala disponible
                         Card(
                           margin: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ListTile(
-                                title: Text('Nombre: ${room.name}'),
+                                title: Text(
+                                    'Nombre: ${room.name}'), // Mostrar nombre de la sala
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Ubicación: ${room.location}'),
-                                    Text('Código: ${room.code}'),
                                     Text(
-                                        'Capacidad: ${room.capacity.toString()}'),
+                                        'Ubicación: ${room.location}'), // Mostrar ubicación de la sala
+                                    Text(
+                                        'Código: ${room.code}'), // Mostrar código de la sala
+                                    Text(
+                                        'Capacidad: ${room.capacity.toString()}'), // Mostrar capacidad de la sala
                                   ],
                                 ),
                                 onTap: () {
                                   setState(() {
-                                    _selectedRoom = room;
+                                    _selectedRoom =
+                                        room; // Al seleccionar una sala, asignarla como sala seleccionada
                                   });
                                 },
                               ),
+                              // Mostrar botones de reserva si la sala está seleccionada
                               if (_selectedRoom == room)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -91,14 +108,16 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
                                     children: [
                                       ElevatedButton(
                                         onPressed: () {
-                                          _reserveRoom(_selectedRoom!);
+                                          _reserveRoom(
+                                              _selectedRoom!); // Método para reservar la sala seleccionada
                                         },
                                         child: Text('Reservar'),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
                                           setState(() {
-                                            _selectedRoom = null;
+                                            _selectedRoom =
+                                                null; // Cancelar la selección de la sala
                                           });
                                         },
                                         child: Text('Cancelar'),
@@ -114,7 +133,9 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
                   },
                 );
               } else {
-                return const Center(child: Text('No hay salas disponibles.'));
+                return const Center(
+                    child: Text(
+                        'No hay salas disponibles.')); // Mostrar mensaje si no hay salas disponibles
               }
             }
           },
@@ -123,6 +144,7 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
     );
   }
 
+  // Método para mostrar un diálogo de solicitud de reserva
   void _reserveRoom(Room room) {
     showDialog(
       context: context,
@@ -131,32 +153,36 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
         final _quantityController = TextEditingController();
         final _studentsController = TextEditingController();
 
-        var room_code = room.code;
+        var room_code = room.code; // Código de la sala seleccionada
         return AlertDialog(
-          title: Text('Completar solicitud de reserva: Sala $room_code'),
+          title: Text(
+              'Completar solicitud de reserva: Sala $room_code'), // Título del diálogo con el nombre de la sala
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 TextFormField(
                   controller: _dateController,
                   decoration: const InputDecoration(
-                    labelText: 'Fecha (yyyy-mm-dd)',
+                    labelText:
+                        'Fecha (yyyy-mm-dd)', // Campo para ingresar la fecha de reserva
                   ),
                   keyboardType: TextInputType.datetime,
                 ),
                 TextFormField(
                   controller: _quantityController,
                   decoration: const InputDecoration(
-                    labelText: 'Hora de inicio (17:00:00)',
+                    labelText:
+                        'Hora de inicio (17:00:00)', // Campo para ingresar la hora de inicio
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.datetime,
                 ),
                 TextFormField(
                   controller: _studentsController,
                   decoration: const InputDecoration(
-                    labelText: 'Cantidad de alumnos (1)',
+                    labelText:
+                        'Cantidad de alumnos (1)', // Campo para ingresar la cantidad de alumnos
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.datetime,
                 ),
                 SizedBox(height: 20),
                 Row(
@@ -165,18 +191,20 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
                     ElevatedButton(
                       onPressed: () {
                         _submitReservation(
+                          // Método para enviar la solicitud de reserva
                           room.code,
                           _dateController.text,
                           _quantityController.text,
                           int.tryParse(_studentsController.text) ?? 0,
                         );
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(); // Cerrar el diálogo
                       },
                       child: Text('Reservar'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .pop(); // Cancelar la reserva y cerrar el diálogo
                       },
                       child: Text('Cancelar'),
                     ),
@@ -190,6 +218,7 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
     );
   }
 
+  // Método para mostrar un diálogo de éxito de reserva
   void _showSuccessDialog(String room, String startTime, String token,
       String date, String userEmail) {
     showDialog(
@@ -198,7 +227,7 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
         return AlertDialog(
           title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green),
+              Icon(Icons.check_circle, color: Colors.green), // Icono de éxito
               SizedBox(width: 8),
               Flexible(
                 child: Text(
@@ -236,7 +265,8 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: token));
+                    Clipboard.setData(ClipboardData(
+                        text: token)); // Copiar el token al portapapeles
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Token copiado al portapapeles')),
                     );
@@ -259,6 +289,7 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
     );
   }
 
+  // Método para enviar la solicitud de reserva al servidor
   void _submitReservation(
       String room, String date, String quantity, int students) async {
     try {
@@ -269,28 +300,26 @@ class _ReserveRoomsPageState extends State<ReserveRoomsPage> {
         quantity: students,
       );
 
-      var reservationResponse =
-          await RoomRequest.reserveRoom(reservationRequest);
+      var reservationResponse = await RoomRequest.reserveRoom(
+          reservationRequest); // Enviar solicitud de reserva al servicio
 
-      // Verificar si la respuesta contiene datos
       if (reservationResponse.isNotEmpty) {
-        // Podrías iterar sobre los elementos de la lista
         for (var responseData in reservationResponse) {
-          // Tratar cada elemento según sea necesario
-          // Ejemplo de acceso a los datos (dependiendo de la estructura de la lista)
-          String token = responseData['token'];
-          String userEmail = responseData['userEmail'];
-          String startTime = responseData['start'];
+          String token = responseData['token']; // Obtener el token de reserva
+          String userEmail = responseData[
+              'userEmail']; // Obtener el correo electrónico asociado
+          String startTime = responseData['start']; // Obtener la hora de inicio
 
-          _showSuccessDialog(room, startTime, token, date, userEmail);
+          _showSuccessDialog(room, startTime, token, date,
+              userEmail); // Mostrar diálogo de éxito
           print('Sala $room reservada con éxito');
         }
       } else {
         throw Exception('Respuesta de reserva vacía');
       }
     } catch (error) {
-      print('Error al reservar la sala: $error');
-      // Manejar el error, mostrar un diálogo de error, etc.
+      print(
+          'Error al reservar la sala: $error'); // Manejar error al reservar sala
     }
   }
 }
