@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
           );
         } else {
           print('El token de sesión es nulo.');
-          // Aquí puedes manejar el caso cuando el token de sesión es nulo
+          // Solo de prueba
         }
       } else {
         print('Inicio de sesión cancelado.');

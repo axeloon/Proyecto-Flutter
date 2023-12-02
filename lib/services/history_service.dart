@@ -6,10 +6,7 @@ import 'token_storage.dart';
 class HistoryService {
   // Método para obtener el historial
   static Future<List<History>> fetchHistory(String roomCode, String isoDate) async {
-    final Uri historyUrl = Uri.https(
-      'api.sebastian.cl',
-      'booking/v1/reserve/$roomCode/schedule/$isoDate',
-    );
+    final Uri historyUrl = Uri.https('api.sebastian.cl', 'booking/v1/reserve/$roomCode/schedule/$isoDate',);
 
     final String? token = TokenStorage.idToken;
 
@@ -39,7 +36,6 @@ class HistoryService {
       throw Exception('Error al realizar la solicitud para obtener el historial: $error');
     }
   }
-
   // Método para eliminar una reserva y devolver el código de estado
   static Future<int> deleteReservation(String token) async {
     final Uri deleteUrl = Uri.https('api.sebastian.cl', 'booking/v1/reserve/$token/cancel');

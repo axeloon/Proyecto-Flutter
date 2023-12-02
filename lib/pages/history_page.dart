@@ -42,7 +42,7 @@ class _HistoryPageState extends State<HistoryPage> {
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              // Al hacer clic en el botón, realiza la solicitud de busqueda de la reserva
+              // Realiza la solicitud de busqueda de la reserva
               _fetchHistory();
             },
             child: const Text('Buscar Historial'),

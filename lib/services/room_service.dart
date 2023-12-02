@@ -12,7 +12,6 @@ class RoomService {
     if (token == null) {
       throw Exception('El token de sesión es nulo.');
     }
-
     try {
       final response = await http.get(
         apiUrl,
